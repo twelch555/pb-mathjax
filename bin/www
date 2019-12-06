@@ -6,7 +6,16 @@
 
 var app = require('../app');
 var debug = require('debug')('pb-mathjax:server');
-var http = require('http');
+var fs = require('fs'); // Add fs dependency
+var https = require('https'); // remove http, add https dependency
+
+/**
+ * Add constant for reading key and certificate, adjust to suit your own setup
+ */
+const ssl_options = {
+  key: fs.readFileSync('path/to/server/private/key'),
+  cert: fs.readFileSync('path/to/server/ssl/cert')
+};
 
 /**
  * Get port from environment and store in Express.
@@ -16,10 +25,10 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTPS server.
  */
-
-var server = http.createServer(app);
+// Adjust createServer for https and cert/key constant
+var server = https.createServer(ssl_options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
